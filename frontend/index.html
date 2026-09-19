@@ -1,96 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Replan AI - Study Recovery Coach</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState } = React;
-
-    function App() {
-      const [tasks, setTasks] = useState([
-        { id: 1, title: "Binary Search & Two Pointers", priority: "High", deadline: "Tomorrow", status: "pending" },
-        { id: 2, title: "DBMS Normalization", priority: "Medium", deadline: "In 3 days", status: "pending" }
-      ]);
-      const [title, setTitle] = useState("");
-      const [priority, setPriority] = useState("High");
-
-      const addTask = (e) => {
-        e.preventDefault();
-        if (!title.trim()) return;
-        setTasks([...tasks, { id: Date.now(), title, priority, deadline: "Soon", status: "pending" }]);
-        setTitle("");
-      };
-
-      const toggleStatus = (id) => {
-        setTasks(tasks.map(t => t.id === id ? { ...t, status: t.status === "completed" ? "pending" : "completed" } : t));
-      };
-
-      return (
-        <main className="max-w-3xl mx-auto py-12 px-4">
-          <header className="mb-8">
-            <h1 className="text-3xl font-extrabold text-blue-400">AI Study Recovery Coach</h1>
-            <p className="text-slate-400 mt-1">Adaptive replanning system for backlogged students</p>
-          </header>
-
-          <form onSubmit={addTask} className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex gap-3 mb-8">
-            <input 
-              type="text" 
-              placeholder="Task name (e.g., LeetCode 3Sum, OS Deadlocks)" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)}
-              className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-            />
-            <select 
-              value={priority} 
-              onChange={(e) => setPriority(e.target.value)}
-              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none"
-            >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-            <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
-              Add Task
-            </button>
-          </form>
-
-          <section className="space-y-3">
-            <h2 className="text-xl font-bold text-slate-200">Current Recovery Backlog</h2>
-            {tasks.map(task => (
-              <div key={task.id} className="bg-slate-900 border border-slate-800 p-4 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <input 
-                    type="checkbox" 
-                    checked={task.status === "completed"} 
-                    onChange={() => toggleStatus(task.id)}
-                    className="w-4 h-4 accent-blue-600 cursor-pointer"
-                  />
-                  <span className={task.status === "completed" ? "line-through text-slate-500" : "text-slate-200"}>
-                    {task.title}
-                  </span>
-                </div>
-                <span className={`text-xs px-2.5 py-1 rounded font-medium ${
-                  task.priority === "High" ? "bg-red-950/60 text-red-400 border border-red-800/40" : "bg-blue-950/60 text-blue-400 border border-blue-800/40"
-                }`}>
-                  {task.priority}
-                </span>
-              </div>
-            ))}
-          </section>
-        </main>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234f46e5'/><path d='M30 50 L45 65 L70 35' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Replan AI — Intelligent Study Recovery & Workload Rebalancer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] min-h-screen antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

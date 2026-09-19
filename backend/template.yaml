@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AI Study Recovery Coach - Cloud-Native Serverless Architecture
+  AWS First Commit (Bharat Builds Tour 2026) - Team Fast & Furious
+
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 512
+    Runtime: python3.12
+    Tracing: Active
+    Environment:
+      Variables:
+        DYNAMODB_TABLE_NAME: !Ref StudyRecoveryTable
+        BEDROCK_MODEL_ID: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+
+Resources:
+  # ==============================================================================
+  # API GATEWAY (HTTP API v2)
+  # ==============================================================================
+  StudyRecoveryHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - PATCH
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowOrigins:
+          - '*'
+
+  # ==============================================================================
+  # LAMBDA MICROSERVICE (Python 3.12)
+  # ==============================================================================
+  StudyRecoveryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./lambda/
+      Handler: app.lambda_handler
+      Policies:
+        # Least-Privilege Bedrock Access
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource:
+                - "arn:aws:bedrock:*::foundation-model/anthropic.claude*"
+                - "arn:aws:bedrock:*::foundation-model/amazon.nova*"
+            # Scoped DynamoDB Access
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+                - dynamodb:UpdateItem
+                - dynamodb:Query
+              Resource: !GetAtt StudyRecoveryTable.Arn
+      Events:
+        PostTasks:
+          Type: HttpApi
+          Properties:
+            Path: /tasks
+            Method: POST
+            ApiId: !Ref StudyRecoveryHttpApi
+        GetTasks:
+          Type: HttpApi
+          Properties:
+            Path: /tasks
+            Method: GET
+            ApiId: !Ref StudyRecoveryHttpApi
+        PatchTask:
+          Type: HttpApi
+          Properties:
+            Path: /tasks/{id}
+            Method: PATCH
+            ApiId: !Ref StudyRecoveryHttpApi
+        GeneratePlan:
+          Type: HttpApi
+          Properties:
+            Path: /plan/generate
+            Method: POST
+            ApiId: !Ref StudyRecoveryHttpApi
+        Replan:
+          Type: HttpApi
+          Properties:
+            Path: /plan/replan
+            Method: POST
+            ApiId: !Ref StudyRecoveryHttpApi
+
+  # ==============================================================================
+  # DYNAMODB SINGLE-TABLE (StudyRecoveryTable)
+  # ==============================================================================
+  StudyRecoveryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StudyRecoveryTable
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+
+Outputs:
+  HttpApiUrl:
+    Description: "URL of the HTTP API Gateway endpoint"
+    Value: !Sub "https://${StudyRecoveryHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  LambdaFunctionArn:
+    Description: "ARN of the AI Study Recovery Lambda Function"
+    Value: !GetAtt StudyRecoveryFunction.Arn
+  DynamoDBTableArn:
+    Description: "ARN of the DynamoDB Single-Table"
+    Value: !GetAtt StudyRecoveryTable.Arn

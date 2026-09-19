@@ -1,0 +1,16 @@
+# Hackathon 3-Minute Demo Pitch & Presentation Script
+## Event: AWS First Commit (Bharat Builds Tour 2026)
+### Team: Fast & Furious | Project: AI Study Recovery Coach
+
+---
+
+### Demo Flow Timing & Key Talking Points
+
+| Timestamp | Section | Screen & Action | Speaker Script |
+|---|---|---|---|
+| **0:00 – 0:20** | **The Problem** | Landing on Dashboard with tasks | "Good morning judges. Every student makes study timetables, but real life always breaks them. A late lab, a difficult LeetCode bug, or sudden fatigue causes a task to slip. Conventional planners give zero dynamic recourse—tasks pile up into an overwhelming backlog, leading to replanning paralysis and guilt." |
+| **0:20 – 0:40** | **The Solution** | Highlight Mission & 3D Three.js Orbit | "We built the **AI Study Recovery Coach** to shift the paradigm from rigid schedule enforcement to continuous, guilt-free recovery. Here you see our 360° Three.js Study Recovery Orbit, where pending tasks rotate around the Amazon Bedrock core organized into Critical, Primary, and Deferrable orbits." |
+| **0:40 – 1:50** | **Live Core Loop** | 1. Add Task<br>2. Generate Plan<br>3. Mark Progress<br>4. Trigger Disruption | "Let's run the core loop: <br>1. **FR-01 Ingestion**: We add 'Operating System Virtual Memory Paging' with tomorrow's deadline. Watch the priority engine table update live using our deterministic formula: $0.45U + 0.35I + 0.20D$. By calculating urgency deterministically before Bedrock, we completely eliminate LLM hallucination in task ordering.<br>2. **FR-03 AI Recovery Plan**: We declare 3 hours of study capacity. Amazon Bedrock synthesizes a fatigue-aware recovery plan—strictly enforcing 90-minute deep work blocks and 15-minute cognitive reset intervals.<br>3. **FR-04 Progress Tracking**: The student completes the first session and logs progress.<br>4. **FR-05 Adaptive Replan**: Now disruption strikes! A college lab ran 1 hour overtime. Instead of manual rescheduling, the student clicks **'Disrupted? Adapt Plan'**. In one click, the system recalculates remaining workload against new capacity, defers low-urgency tasks, and delivers a clean Version 2 recovery schedule." |
+| **1:50 – 2:20** | **AWS Architecture** | Click **'AWS Architecture'** modal | "Under the hood, our solution is 100% serverless: <br>• Amazon API Gateway HTTP API v2 routes client requests with sub-millisecond overhead.<br>• AWS Lambda executes stateless Python 3.12 microservices with deterministic priority math.<br>• Amazon Bedrock (Claude 3.5 Sonnet / Nova) formats fatigue-aware blocks into strict validated JSON.<br>• Amazon DynamoDB Single-Table stores tasks, daily contexts, and versioned plans.<br>• With our resilient greedy bin-packing fallback, our app guarantees zero catastrophic crashes even during network throttling." |
+| **2:20 – 2:45** | **Practical Value** | Telemetry and stats | "Unlike static calendars that punish missed sessions with red overdue badges, the AI Study Recovery Coach provides an immediate, guilt-free path forward, directly addressing the core psychology of student burnout." |
+| **2:45 – 3:00** | **Conclusion & Repo** | Closing screen & GitHub link | "Engineered end-to-end for AWS First Commit. Thank you, and we're ready for your questions!" |
