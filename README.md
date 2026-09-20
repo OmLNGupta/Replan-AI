@@ -126,108 +126,6 @@ All application entities reside in a single table partitioned for high-performan
 
 ---
 
-## 🚀 Deployment Guide
-
-### Option 1: Deploy Frontend to Vercel (Recommended — 2 Minutes)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/OmLNGupta/Replan-AI)
-
-#### Via Vercel Web Dashboard:
-1. Go to [vercel.com](https://vercel.com) and log in with GitHub.
-2. Click **Add New** → **Project** and select `OmLNGupta/Replan-AI`.
-3. Set **Root Directory** to `frontend`.
-4. Framework Preset will auto-detect **Vite**.
-5. Click **Deploy**. Your live URL will be active in seconds!
-
-#### Via Vercel CLI:
-```bash
-cd frontend
-npm install -g vercel
-vercel
-# Follow prompts (Select Root Directory: ./, Framework: Vite)
-vercel --prod
-```
-
----
-
-### Option 2: Deploy Frontend to AWS Amplify
-
-1. Open the [AWS Amplify Console](https://console.aws.amazon.com/amplify).
-2. Choose **Host web app** and connect your GitHub repository `OmLNGupta/Replan-AI`.
-3. Select the `main` branch.
-4. Set App Root to `frontend`.
-5. Amplify auto-detects Vite build settings:
-   ```yaml
-   frontend:
-     phases:
-       preBuild:
-         commands:
-           - npm ci
-       build:
-         commands:
-           - npm run build
-     artifacts:
-       baseDirectory: dist
-       files:
-         - '**/*'
-   ```
-6. Click **Save and Deploy**. CloudFront CDN distribution will be configured automatically.
-
----
-
-### Option 3: Deploy Serverless Backend to AWS (AWS SAM)
-
-Prerequisites: [AWS CLI](https://aws.amazon.com/cli/) and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html).
-
-```bash
-cd backend
-
-# Build Lambda microservice
-sam build
-
-# Deploy to your AWS Account (Creates API Gateway, Lambda, DynamoDB & IAM roles)
-sam deploy --guided
-```
-
-When prompted:
-- **Stack Name**: `replan-ai-backend`
-- **AWS Region**: `us-east-1` (or your preferred Bedrock-enabled region)
-- **Confirm changes before deploy**: `Y`
-- **Allow SAM CLI IAM role creation**: `Y`
-
-Once deployed, SAM outputs the public `HttpApiUrl` (e.g. `https://xyz.execute-api.us-east-1.amazonaws.com`).
-
----
-
-## 💻 Local Development Setup
-
-### 1. Prerequisites
-- **Node.js**: v18+ (tested on v24)
-- **Python**: 3.10+ (tested on Python 3.12 / 3.14)
-
-### 2. Run Backend Simulator (Port 8000)
-```bash
-cd backend
-python -m pip install -r requirements.txt
-
-# Run automated tests
-python test_backend.py
-
-# Start local API Gateway simulator
-python server.py
-```
-*Server runs on `http://127.0.0.1:8000`.*
-
-### 3. Run Frontend (Port 3000)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*Open `http://localhost:3000` in your browser.*
-
----
-
 ## 📂 Repository Structure
 
 ```
@@ -275,10 +173,9 @@ Replan-AI/
 
 ---
 
-## 👥 Engineering & Architecture
+## 👥 Author
 
 - **Om Laxmi Narayan Gupta** — Lead Architect & Full-Stack Development
-- **Target Event**: AWS First Commit (Bharat Builds Tour)
 
 ---
 
