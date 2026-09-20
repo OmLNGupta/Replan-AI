@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  AI Study Recovery Coach - Cloud-Native Serverless Architecture
-  AWS First Commit (Bharat Builds Tour 2026) - Team Fast & Furious
+  Replan AI - Cloud-Native Serverless Architecture
+  Automated Study Schedule Restoration & Intelligent Workload Rebalancer
 
 Globals:
   Function:
@@ -13,7 +13,7 @@ Globals:
     Environment:
       Variables:
         DYNAMODB_TABLE_NAME: !Ref StudyRecoveryTable
-        BEDROCK_MODEL_ID: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+        BEDROCK_MODEL_ID: "us.anthropic.claude-3-5-sonnet-20241022-v2:0"
 
 Resources:
   # ==============================================================================
@@ -31,6 +31,9 @@ Resources:
         AllowHeaders:
           - Content-Type
           - Authorization
+          - X-Amz-Date
+          - X-Api-Key
+          - X-Amz-Security-Token
         AllowOrigins:
           - '*'
 
@@ -43,21 +46,22 @@ Resources:
       CodeUri: ./lambda/
       Handler: app.lambda_handler
       Policies:
-        # Least-Privilege Bedrock Access
         - Statement:
+            # Bedrock foundation models and cross-region inference profiles
             - Effect: Allow
               Action:
                 - bedrock:InvokeModel
               Resource:
-                - "arn:aws:bedrock:*::foundation-model/anthropic.claude*"
-                - "arn:aws:bedrock:*::foundation-model/amazon.nova*"
-            # Scoped DynamoDB Access
+                - "arn:aws:bedrock:*::foundation-model/*"
+                - "arn:aws:bedrock:*:*:inference-profile/*"
+            # DynamoDB Single-Table access
             - Effect: Allow
               Action:
                 - dynamodb:PutItem
                 - dynamodb:GetItem
                 - dynamodb:UpdateItem
                 - dynamodb:Query
+                - dynamodb:DescribeTable
               Resource: !GetAtt StudyRecoveryTable.Arn
       Events:
         PostTasks:
@@ -90,6 +94,12 @@ Resources:
             Path: /plan/replan
             Method: POST
             ApiId: !Ref StudyRecoveryHttpApi
+        GetPlan:
+          Type: HttpApi
+          Properties:
+            Path: /plan
+            Method: GET
+            ApiId: !Ref StudyRecoveryHttpApi
 
   # ==============================================================================
   # DYNAMODB SINGLE-TABLE (StudyRecoveryTable)
@@ -117,7 +127,7 @@ Outputs:
     Description: "URL of the HTTP API Gateway endpoint"
     Value: !Sub "https://${StudyRecoveryHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
   LambdaFunctionArn:
-    Description: "ARN of the AI Study Recovery Lambda Function"
+    Description: "ARN of the Replan AI Lambda Function"
     Value: !GetAtt StudyRecoveryFunction.Arn
   DynamoDBTableArn:
     Description: "ARN of the DynamoDB Single-Table"

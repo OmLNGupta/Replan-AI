@@ -26,18 +26,18 @@ export const App: React.FC = () => {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState<boolean>(false);
   const [isAdaptModalOpen, setIsAdaptModalOpen] = useState<boolean>(false);
 
-  // Load initial tasks & cached plan
+  // Load initial tasks & plan (from DynamoDB backend or local cache)
   useEffect(() => {
     const init = async () => {
       const fetchedTasks = await api.getTasks();
       setTasks(fetchedTasks);
-      const cached = api.getCachedPlan();
-      if (cached) {
-        setPlan(cached);
+      const latestPlan = await api.getPlan(targetDate);
+      if (latestPlan) {
+        setPlan(latestPlan);
       }
     };
     init();
-  }, []);
+  }, [targetDate]);
 
   // FR-01: Add Task
   const handleAddTask = async (newTaskData: Omit<Task, 'taskId' | 'status' | 'loggedMinutes' | 'createdAt'>) => {

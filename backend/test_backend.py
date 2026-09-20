@@ -136,5 +136,21 @@ class TestPriorityEngine(unittest.TestCase):
         self.assertTrue(replan_data["isReplan"])
         self.assertIn("Lab report ran 1 hour overtime", replan_data["recoverySummary"])
 
+        # 5. GET /plan (Fetch latest persisted recovery plan version 2)
+        get_plan_event = {
+            "httpMethod": "GET",
+            "path": "/plan",
+            "queryStringParameters": {
+                "userId": user_id,
+                "date": "2026-09-19"
+            }
+        }
+        resp5 = lambda_handler(get_plan_event)
+        self.assertEqual(resp5["statusCode"], 200)
+        plan_query_data = json.loads(resp5["body"])
+        self.assertIn("plan", plan_query_data)
+        self.assertEqual(plan_query_data["plan"]["version"], 2)
+        self.assertIn(2, plan_query_data.get("availableVersions", []))
+
 if __name__ == "__main__":
     unittest.main()

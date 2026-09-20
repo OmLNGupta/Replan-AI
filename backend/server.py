@@ -87,7 +87,7 @@ class APIGatewaySimulatorHandler(BaseHTTPRequestHandler):
 def run_server():
     server_address = ("127.0.0.1", PORT)
     httpd = HTTPServer(server_address, APIGatewaySimulatorHandler)
-    print(f"🚀 Replan AI - API Gateway Simulator running on http://127.0.0.1:{PORT}")
+    print(f">> Replan AI - API Gateway Simulator running on http://127.0.0.1:{PORT}")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
